@@ -24,8 +24,9 @@ Original_structure/       本次原结构B实验；脚本可独立运行，不�
 Changed_structure/        预留空目录，由restore_transfer.py创建，不运行任何实验
 artifacts/                数据和检查点的分卷，每个不超过45MiB，无需Git LFS
 transfer_manifest.json    所有分卷和原始文件的SHA-256与大小
-environment.yml           推荐Conda环境，含PyTorch2.5.1 CUDA12.4
-requirements-cu124.txt    等价pip安装入口
+environment.yml           RTX5060推荐环境，含PyTorch2.7.1 CUDA12.8
+requirements-cu128.txt    RTX5060等价pip安装入口
+requirements-cu124.txt    原电脑旧环境，仅供追溯，不适用于RTX5060
 environment/              原电脑环境版本清单，仅供追溯
 restore_transfer.py       拼接、校验、恢复数据和训练状态
 check_environment.py      CUDA、实际分类器、GRU归因、优化器迁移自检
@@ -37,7 +38,7 @@ Git不能保存空文件夹，所以Changed_structure在克隆后由恢复工具
 
 ## 新电脑操作（Windows NVIDIA GPU）
 
-安装Miniconda和兼容NVIDIA驱动。使用Anaconda/Miniconda Prompt：
+安装Miniconda和最新兼容的NVIDIA驱动。默认环境已针对RTX5060更新为PyTorch2.7.1+cu128。使用Anaconda/Miniconda Prompt：
 
 ```powershell
 git clone https://github.com/viclaw0902/Koopman-XAI.git
@@ -58,16 +59,27 @@ python start_resume.py
 ```powershell
 conda create -n koopman_xai python=3.11.15 pip -y
 conda activate koopman_xai
-python -m pip install -r requirements-cu124.txt
+python -m pip install -r requirements-cu128.txt
 ```
 
 原环境关键版本：Python3.11.15、torch2.5.1+cu124、numpy1.26.4、matplotlib3.7.0。不必复制整套虚拟环境目录，也不需要安装旧工程所有包、Captum、rdata或完整CUDA Toolkit。本实验只读取已准备好的数组。
 
 ### 新显卡兼容性
 
-RTX50/Blackwell等新GPU可能无法使用PyTorch2.5.1+cu124。此时按https://pytorch.org/get-started/locally/安装支持新显卡的PyTorch CUDA构建，仍使用Python3.11和本仓库numpy/matplotlib版本，再执行check_environment.py。检查失败时不要开始训练。环境变化需保留版本记录，跨版本不承诺完全相同数值。
+RTX5060属于Blackwell架构，不能沿用原电脑的PyTorch2.5.1+cu124。本仓库默认改为PyTorch2.7.1+cu128，保留Python3.11及原numpy/matplotlib版本。官方PyTorch2.7发布说明确认Blackwell和CUDA12.8支持：https://pytorch.org/blog/pytorch-2-7/ 。已核实官方索引提供Windows/Python3.11的2.7.1+cu128安装包：https://download.pytorch.org/whl/cu128/torch/ 。
 
-check_environment会加载真实checkpoint、执行一次GRU前向/归因、恢复优化器并在内存做一次测试更新，不保存测试后的权重。默认要求GPU；仅检查文件时可使用`python check_environment.py --allow-cpu`，但这不代表已验证新GPU可用。
+如果已经克隆仓库并按旧配置创建了环境，在仓库目录更新后执行：
+
+```powershell
+git pull --ff-only
+conda activate koopman_xai
+python -m pip install -r requirements-cu128.txt
+python check_environment.py
+```
+
+若尚未恢复数据和检查点，先运行`python restore_transfer.py`再自检。驱动需要支持该显卡与CUDA12.8运行时，但无需另装完整CUDA Toolkit。此环境变更不修改模型、训练参数或检查点；跨PyTorch版本和GPU不承诺逐位一致。RTX5060的实际运行必须在新电脑通过自检，原电脑未验证该显卡。检查失败时不要开始训练。
+
+check_environment会报告PyTorch/CUDA版本、显卡及计算能力，加载真实checkpoint、执行一次GRU前向/归因、恢复优化器并在内存做一次测试更新，不保存测试后的权重。默认要求GPU；仅检查文件时可使用`python check_environment.py --allow-cpu`，但这不代表已验证新GPU可用。
 
 ## 恢复后实际会做什么
 

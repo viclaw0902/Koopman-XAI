@@ -48,6 +48,9 @@ def main(allow_cpu=False):
     print(json.dumps({"environment_check": "passed", "python": platform.python_version(), "torch": torch.__version__,
                       "numpy": np.__version__, "device": str(device),
                       "gpu": torch.cuda.get_device_name(0) if device.type == "cuda" else None,
+                      "cuda_runtime": torch.version.cuda,
+                      "gpu_compute_capability": torch.cuda.get_device_capability(0) if device.type == "cuda" else None,
+                      "pytorch_cuda_architectures": torch.cuda.get_arch_list() if device.type == "cuda" else [],
                       "data": str(prepared_directory(config)), "saved_epoch": checkpoint["epoch"],
                       "next_epoch": checkpoint["epoch"] + 1, "deeplift": diagnostics,
                       "optimizer_portability": "passed; in-memory test only, checkpoints unchanged"}, ensure_ascii=False), flush=True)
