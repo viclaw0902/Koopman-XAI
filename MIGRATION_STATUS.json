@@ -1,0 +1,23 @@
+{
+  "snapshot_date": "2026-10-25",
+  "timezone": "Asia/Shanghai",
+  "state": "paused_for_migration",
+  "seed": 42,
+  "classifier": "complete",
+  "manifold": "complete, 50 epochs",
+  "latent_caches": "train and validation complete; included",
+  "koopman_dimension": 16,
+  "last_complete_epoch": 42,
+  "next_epoch": 43,
+  "interrupted_epoch": 43,
+  "interrupted_epoch_partial_updates_saved": false,
+  "endpoint_pairs_saved": 700,
+  "endpoint_failures": 0,
+  "pending_dimensions": [32, 64, 128],
+  "pending_seeds": [43, 44, 45, 46],
+  "attribution_evaluation": "not started",
+  "exact_mid_epoch_resume": false,
+  "resume_method": "restore model, optimizer, NumPy RNG and CPU torch RNG from last.pt, restart epoch43",
+  "cross_gpu_bitwise_identity_guaranteed": false,
+  "diagnostic_note": "At epoch42 z16 effective_rank was about2.66. This is preserved, not hidden. Dimension selection must still apply the preexisting noncollapse rule; if every candidate fails, stop for review rather than silently relax it."
+}

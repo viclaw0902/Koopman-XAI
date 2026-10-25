@@ -1,0 +1,11 @@
+name: koopman_xai
+channels:
+  - defaults
+dependencies:
+  - python=3.11.15
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu124
+      - torch==2.5.1+cu124
+      - numpy==1.26.4
+      - matplotlib==3.7.0
