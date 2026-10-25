@@ -48,7 +48,7 @@ Decode z->learned inverse->h->shared decoder->original window. Explicit straight
 
 ## Execution and outputs
 
-Use `D:/App/Miniconda/myenvs/multitask_project/python.exe` (PyTorch2.5.1 CUDA12.4).
+On the new RTX5060 computer, use the repository-root `environment.yml` (Python3.11, PyTorch2.7.1 CUDA12.8) and activate `koopman_xai`. The old computer used `D:/App/Miniconda/myenvs/multitask_project/python.exe` with PyTorch2.5.1 CUDA12.4; that historical environment is not the RTX5060 recommendation. Read `../TECHNICAL_HANDOFF.md` for the complete experiment protocol and migration state. Run the following commands from this `Original_structure` directory, or use `python start_resume.py` from the repository root after restoring the transfer.
 
 ```powershell
 python train.py --audit
